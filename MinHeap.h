@@ -31,12 +31,20 @@ class Node {
 
   Node(Node* left, Node* right, char c, int freq){
     this->character = c;
-    this->freq = 1;
+    this->freq = freq;
     this->left = left;
     this->right = right;
   }
   
   ~Node(){
+  }
+
+  char getC() {
+    return character;
+  }
+
+  int getF() {
+    return freq;
   }
   
   char character;
@@ -52,6 +60,7 @@ class Heap {
 
   Node* array;
   Node* tree;
+  Node** treeStar;
   Node* Minheap;
   int sizeOfTree;
   std::map<char,std::string> map;
@@ -105,74 +114,96 @@ class Heap {
 	count++;
       }
     }
+    buildMinHeap();
   }
 
-  // this is OK
+  // This is OK
   void buildMinHeap(){
     int k;
     for(int i=sizeOfTree-1; i>=1; i--) {
       percolateDown(i);
     }
+   
+    //cout << "print tree........" << endl;
+    //printTree();
+    
+    // switch the tree to Node**
+    buildTreeStar();
+
+    //cout << "print treeStar...." << endl;
+    //printTreeStar();
   }
 
-  Node deleteMin(){
-    Node temp = tree[1];
-    int index = 1;
+  Node* getMin(){
+    Node* temp = treeStar[1];
+       
+    //cout << "before swap:" << endl;
+    //printTreeStar();
+    
     sizeOfTree -= 1;
-    tree[index] = tree[sizeOfTree];        // put the last Node to the root
-    while(2*index+1 <= sizeOfTree){
-      if(tree[index].freq < tree[2*index].freq || tree[index].freq < tree[2*index+1].freq){
-	if(tree[2*index+1].freq <= tree[2*index].freq){
-	  swap(tree[2*index+1], tree[index]);
-	  index = index*2+1;
-	}
-	else {
-	  swap(tree[2*index], tree[index]);
-	  index = 2*index;
-	}
-      }
-    }
-    if(2*index < sizeOfTree) {
-      if(tree[index].freq > tree[2*index].freq) {
-	swap(tree[index], tree[2*index]);
-      }
-    }
+    treeStar[1] = treeStar[sizeOfTree];      // put the last Node to the root
+    treeStar[sizeOfTree] = NULL;
     
+    cout << "before percolate down" << endl;
+    printTreeStar();
+
+    percolateDown2(1);   // This function is OK
+
+    cout << "after percolate down" << endl;
+    printTreeStar();
     
-    Node* tmp = new Node[sizeOfTree];
-    for(int i=0; i<sizeOfTree; i++){
-      tmp[i] = tree[i];
-    }
-    tree = tmp;
     return temp;
   }
-
-  
-  void merge(){
+    
+ 
+  void merge(){  
     while(sizeOfTree > 2) {
-    Node tmp1 = deleteMin();
-    Node tmp2 = deleteMin();
-    Node* tmp3 = &tmp1;
-    Node* tmp4 = &tmp2;
-    int newfreq = (tmp3->freq + tmp4->freq);
-  
-    sizeOfTree += 1;
-    int index = sizeOfTree-1;
+      //cout << "size is:" << sizeOfTree << endl;
+      
+      Node* tmp1 = getMin();
+      Node* tmp2 = getMin();
+      //Node* tmp3 = new Node(tmp1.character, tmp1.freq);
+      //Node* tmp4 = new Node(tmp2.character, tmp2.freq);
+      cout << "tmp1->freq =" << tmp1->freq << endl;
+      cout << "tmp2->freq =" << tmp2->freq << endl;
+      int newfreq = (tmp1->freq + tmp2->freq);
+      cout << "newfreq=" << newfreq << endl;
 
-    Node* temp = new Node[sizeOfTree];
-    for(int i=1; i<sizeOfTree-1; i++) {
-      temp[i] = tree[i];
-    }
+      //cout << "size is:" << sizeOfTree << endl;
+      
+      sizeOfTree += 1;
+      Node** temp = new Node*[sizeOfTree];
+      for(int i=0; i<sizeOfTree-1; i++) {
+	temp[i] = treeStar[i];
+      }
+      
+      Node* T = new Node(tmp2, tmp1, 'T', newfreq);
+      temp[sizeOfTree-1] = T;
 
-    Node* a = new Node(tmp4, tmp3, 'T', newfreq);
-    temp[sizeOfTree-1] = *a;
-    tree = temp;
+      treeStar = new Node*[sizeOfTree];
+      for(int i=0; i<sizeOfTree; i++) {
+	treeStar[i] = temp[i];
+      }
+      int index = sizeOfTree-1;
 
-    // percoalte up
-    while(index/2 >= 1){
-      if(tree[index/2].freq > tree[index].freq)
-	swap(tree[index/2],tree[index]);
-    }
+      //cout << "!!!!!!!!!!!!!!!!!!" << endl;
+      //cout << treeStar[0]->getC() << treeStar[2]->getF() << endl;
+      // percoalte up
+      while(index/2 >= 1){
+	//cout << "1" ;
+	//cout << "index=" << index;
+	cout << "size is:" << sizeOfTree << endl;
+	cout << "treeStar is: " << endl;
+	printTreeStar();
+	if(treeStar[index/2]->freq > treeStar[index]->freq) {
+	  //cout << "111111111111111111" << endl;
+	  swap(treeStar[index/2],treeStar[index]);
+	  index = index/2;
+	}
+	else{
+	  break;
+	  }
+      }
     }
   }
 
@@ -258,15 +289,16 @@ class Heap {
 
   void swap(Node &a, Node &b) {
     cout << "Swap!!!" << endl;
+    Node c = a;
+    a = b;
+    b = c;
+  }
 
-    char c = a.character;
-    int f = a.freq;
-    
-    a.freq = b.freq;
-    a.character = b.character;
-    
-    b.freq = f;
-    b.character = c;
+  void swap(Node* &a, Node* &b) {
+    cout << "Swap!!!" << endl;
+    Node* c = a;
+    a = b;
+    b = c;
   }
 
   void percolateDown(int i) {
@@ -294,15 +326,78 @@ class Heap {
     }
   }
 
-  void printArray(){
-    for(int i=0; i<27; i++)
-      cout << array[i].character << " " << array[i].freq << endl;
+   void percolateDown2(int i) {
+    int left = 2*i;
+    int right = 2*i + 1;  
+    if(2*i >= sizeOfTree || treeStar[left] == NULL || treeStar[right] == NULL){      // leaf
+      return;
+    }
+    else if(left == sizeOfTree-1) {   // only has left child
+      if(treeStar[i]->freq > treeStar[left]->freq)
+	swap(treeStar[i],treeStar[left]);
+    }
+    else if(treeStar[i]->freq > treeStar[left]->freq
+	    || treeStar[i]->freq > treeStar[right]->freq) {
+      if(treeStar[right]->freq <= treeStar[left]->freq) {
+	swap(treeStar[i], treeStar[right]);
+	percolateDown2(right);
+      }
+      else {
+	swap(treeStar[i], treeStar[left]);
+	percolateDown2(left);
+      }
+    }
+    else {
+      return;
+    }
   }
 
-   void printTree(){
-    for(int i=0; i<sizeOfTree; i++)
-      cout << tree[i].character << " " << tree[i].freq << endl;
+  void printArray(){
+    for(int i=0; i<27; i++) {
+      cout << array[i].character << array[i].freq << " ";
+    }
+    cout << endl;
   }
+
+  void printTree(){
+    for(int i=0; i<sizeOfTree; i++) {
+      cout << tree[i].character << tree[i].freq << " ";
+    }
+    cout << endl;
+  }
+
+  void printTreeStar() {
+    for(int i=0; i<sizeOfTree; i++) {
+      cout << treeStar[i]->getC() << treeStar[i]->getF() << " ";
+    }
+    cout << endl;
+  }
+
+  void printTrie(){
+    cout << "start printing Trie" << endl;
+    printTrie(treeStar[1]);
+  }
+  
+  void printTrie(Node* node){
+    cout << "this: " << node->getC() << node->getF() << endl;
+    if(node->left != NULL) {
+      //cout << "left: " << node->left->getC() << node->left->getF() << endl;
+      printTrie(node->left);
+    }
+    if(node->right != NULL) {
+      //cout << "right: " << node->right->getC() << node->right->getF() << endl;
+      printTrie(node->right);
+    }
+    return;
+  }
+
+  void buildTreeStar(){
+    treeStar = new Node*[sizeOfTree];
+    for(int i=0; i<sizeOfTree; i++) {
+      treeStar[i] = new Node(tree[i].character, tree[i].freq);
+    }
+  }
+  
  
 };
 
