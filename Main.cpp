@@ -29,6 +29,17 @@ int main() {
     h.printTreeStar();
     h.printTrie();
 
+    cout << "start building map...." << endl;
+    h.buildMap();
+    cout << "finished building map" << endl;
+    cout << "map is:" << endl;
+    h.printMap();
+    
+    cout << "start encode...." << endl;
+    cout << "the code is: ";
+    h.printCode("aabbcccd");
+    cout << "print code finsihed!" << endl;
+
     /*
     string str;
     cin >> str;

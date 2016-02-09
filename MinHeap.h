@@ -13,6 +13,7 @@ class Node {
     this->freq = 0;
     this->left = NULL;
     this->right = NULL;
+    code = "";
     }
 
   Node(char c, int freq) {
@@ -20,6 +21,7 @@ class Node {
     this->freq = freq;
     this->left = NULL;
     this->right = NULL;
+    code = "";
   }
   
    Node(char c){
@@ -27,6 +29,7 @@ class Node {
     this->freq = 1;
     this->left = NULL;
     this->right = NULL;
+    code = "";
     }
 
   Node(Node* left, Node* right, char c, int freq){
@@ -34,6 +37,7 @@ class Node {
     this->freq = freq;
     this->left = left;
     this->right = right;
+    code = "";
   }
   
   ~Node(){
@@ -51,6 +55,7 @@ class Node {
   int freq;
   Node* left;
   Node* right;
+  string code;
 };
 
 ////////////////////////// Heap //////////////////////////////
@@ -207,23 +212,24 @@ class Heap {
     }
   }
 
-  void buildmap() {
-    Node* root = &tree[1];
-    buildmap(root);
+  void buildMap() {
+    Node* root = treeStar[1];
+    buildMap(root);
   }
 
-  void buildmap(Node* node) {
-    string key = "";
+  void buildMap(Node* node) {
     if(node->left != NULL) {
-      key += "1";
-      buildmap(node->left);
+      node->left->code = node->code + "1";   
+      buildMap(node->left);
     }
     if(node->right != NULL) {
-      key += "0";
-      buildmap(node->right);
+      node->right->code = node->code + "0";
+      buildMap(node->right);
     }
     else if(node->right == NULL && node->left == NULL) {
-      map[node->character] = key;
+      cout << "key=" << node->code << " ";
+      cout << "character=" << node->character << endl;
+      map[node->character] = node->code;
     }
   }
 
@@ -246,7 +252,7 @@ class Heap {
     merge();
 
     cout << "Start buildmap" << endl;
-    buildmap();
+    buildMap();
 
     cout << "Start printcode" << endl;
     printCode(s);
@@ -401,13 +407,31 @@ class Heap {
     return;
   }
 
+  void printMap() {
+    std::map<char,std::string>::const_iterator i;   
+    for(i=map.begin(); i!=map.end(); i++) {
+      cout << i->first << " ";
+      cout << i->second;
+      cout << endl;
+    } 
+  }
+
   void buildTreeStar(){
     treeStar = new Node*[sizeOfTree];
     for(int i=0; i<sizeOfTree; i++) {
       treeStar[i] = new Node(tree[i].character, tree[i].freq);
     }
   }
-  
+
+  /*
+  string getPreviousKey(string s) {\
+    string v;
+    for(int i=0; i<s.length()-1; i++) {
+      v += s[i];
+    }
+    return v;
+  }
+  */
  
 };
 
