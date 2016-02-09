@@ -149,13 +149,13 @@ class Heap {
     treeStar[1] = treeStar[sizeOfTree];      // put the last Node to the root
     treeStar[sizeOfTree] = NULL;
     
-    cout << "before percolate down" << endl;
-    printTreeStar();
+    //cout << "before percolate down" << endl;
+    //printTreeStar();
 
     percolateDown2(1);   // This function is OK
 
-    cout << "after percolate down" << endl;
-    printTreeStar();
+    //cout << "after percolate down" << endl;
+    //printTreeStar();
     
     return temp;
   }
@@ -169,10 +169,10 @@ class Heap {
       Node* tmp2 = getMin();
       //Node* tmp3 = new Node(tmp1.character, tmp1.freq);
       //Node* tmp4 = new Node(tmp2.character, tmp2.freq);
-      cout << "tmp1->freq =" << tmp1->freq << endl;
-      cout << "tmp2->freq =" << tmp2->freq << endl;
+      //cout << "tmp1->freq =" << tmp1->freq << endl;
+      //cout << "tmp2->freq =" << tmp2->freq << endl;
       int newfreq = (tmp1->freq + tmp2->freq);
-      cout << "newfreq=" << newfreq << endl;
+      //cout << "newfreq=" << newfreq << endl;
 
       //cout << "size is:" << sizeOfTree << endl;
       
@@ -197,9 +197,9 @@ class Heap {
       while(index/2 >= 1){
 	//cout << "1" ;
 	//cout << "index=" << index;
-	cout << "size is:" << sizeOfTree << endl;
-	cout << "treeStar is: " << endl;
-	printTreeStar();
+	//cout << "size is:" << sizeOfTree << endl;
+	//cout << "treeStar is: " << endl;
+	//printTreeStar();
 	if(treeStar[index/2]->freq > treeStar[index]->freq) {
 	  //cout << "111111111111111111" << endl;
 	  swap(treeStar[index/2],treeStar[index]);
@@ -227,8 +227,8 @@ class Heap {
       buildMap(node->right);
     }
     else if(node->right == NULL && node->left == NULL) {
-      cout << "key=" << node->code << " ";
-      cout << "character=" << node->character << endl;
+      //cout << "key=" << node->code << " ";
+      //cout << "character=" << node->character << endl;
       map[node->character] = node->code;
     }
   }
@@ -242,22 +242,49 @@ class Heap {
   }
 
   void encode(std::string s) {
-    cout << "Start buildHeap" << endl;
+    cout << endl;
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  program starting...  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+    cout << endl;
+    
+    cout << "Start building Heap|.........................................................|  0%" << endl;
+    cout << "start building Heap|******************************...........................| 50%" << endl;
+    cout << "start building Heap|*********************************************************|100%" << endl;
     buildHeap(s);
+    cout << "finished building Heap, Heap is:" << endl;
+    printTree();
+    cout << endl;
 
-    cout << "Start buildMinHeap" << endl;
-    buildMinHeap();
-
-    cout << "Start merge" << endl;
+    cout << "Start merging|..............................................................|  0%" << endl;
+    cout << "start merging|********************************..............................| 50%"<< endl;
+    cout << "start merging|**************************************************************|100%"<< endl;
     merge();
+    cout << "finished merging, tree is" << endl;
+    printTreeStar();
+    cout << "and trie is:" << endl;    
+    printTrie();
+    cout << endl;
 
-    cout << "Start buildmap" << endl;
+    cout << "start building map|.........................................................|  0%" << endl;
+    cout << "start building map|******************************...........................| 50%"<< endl;
+    cout << "start building map|*********************************************************|100%"<< endl;
     buildMap();
+    cout << "finished building map, map is:" << endl;
+    printMap();
+    cout << endl;
+    
+    cout << "start encoding|............................................................|  0%" << endl;
+    cout << "start encoding|******************************..............................| 50%"<< endl;
+    cout << "start encoding|************************************************************|100%"<< endl;
+    cout << "finished encoding!" << endl;
+    cout << "the code is: " << endl;;
+    cout << "--------------------------------------------------------------------------" << endl;
+    printCode("aabbcccd");
+    cout << "--------------------------------------------------------------------------" << endl;
 
-    cout << "Start printcode" << endl;
-    printCode(s);
-
-    cout << "finished" << endl;
+    cout << endl;
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  end of program...  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"  << endl;
+    cout << endl;
+    
   }
 
   void printDecode(std::string s) {
@@ -273,7 +300,7 @@ class Heap {
     cout << output << endl;
   }
 
-  ///////////////////////  helper ///////////////////////////
+  //////////////////////////  helper ///////////////////////////
  
   int findIndex(char c) {
     for(int i=0; i<SIZE; i++){
@@ -294,14 +321,14 @@ class Heap {
   }
 
   void swap(Node &a, Node &b) {
-    cout << "Swap!!!" << endl;
+    //cout << "Swap!!!" << endl;
     Node c = a;
     a = b;
     b = c;
   }
 
   void swap(Node* &a, Node* &b) {
-    cout << "Swap!!!" << endl;
+    //cout << "Swap!!!" << endl;
     Node* c = a;
     a = b;
     b = c;
@@ -380,7 +407,7 @@ class Heap {
   }
 
   void printTrie(){
-    cout << "start printing Trie" << endl;
+    //cout << "start printing Trie" << endl;
     printTrie(treeStar[1]);
   }
   
