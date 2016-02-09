@@ -278,7 +278,7 @@ class Heap {
     cout << "finished encoding!" << endl;
     cout << "the code is: " << endl;;
     cout << "--------------------------------------------------------------------------" << endl;
-    printCode("aabbcccd");
+    printCode(s);
     cout << "--------------------------------------------------------------------------" << endl;
 
     cout << endl;

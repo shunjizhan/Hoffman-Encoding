@@ -3,16 +3,15 @@
 #include <string>
 #include <cstdio>
 #include <ctime>
-#include "MinHeap.h"
+#include <fstream>
+#include <string>
+#include <iomanip>
 using namespace std;
 
-int main() {
+#include "MinHeap.h"
 
-  freopen("input.txt","r",stdin);
 
-      
-    Heap h;
-    
+int main() { 
     //h.buildHeap("aaaaaaahfgdhfgdaaaaaaabiiighfdhgfdghfiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiddddddddddddddd   dddddghfddddhhhhh  hhhhhhhhhhhhtrhhjtyrjdtyurjuydrhhhhhhhhhhhhhheeeeeeeeeeeeeeeeeeeeeeeeeehgfdhftgdfgkfyjhdghfujgf   ythreeeeeeefdmmmmmmmmmmmmmmmmmmmytrju  yrujyhgfdhgfdhf   gdghfrjtrhytg  hfgdhfdhfg vchgfjkuyfkuyfjujudyrmmmmmmmmmmmmmmmmdhfgdmmcccccccccccu    ytfjydtjydtjytccccccccccccccccccccccbbbbbbbbbbbbbbbhtfdhfdhgdbbbbbbbaaaaaaaaaaaccccccccccccccccccccccaaaaa");
     //cout << "Start building Heap" << endl;
     //h.buildHeap("ytu erh fgsdh xcvsd ue   rbc xbe hbyhcvb rbcygegh");
@@ -20,14 +19,9 @@ int main() {
     //h.buildHeap("aabcccddddddde");
     // h.buildHeap("asjhdfgjuhdfgjuhwegujyfhgsdjyfugqwqwpoiudsfughehrvhgdvzxcvmnsdfgbyjxgfjhserfgjygxjshnfbjwehgxvnbsdjhfbsjmdhgfjhxgvbjnzbxmnbqmwebqwkruhodiufh");
 
-
-    
-    string str;
-    cin >> str;
-    h.encode(str);
-    
+  Heap h;
+  h.encode("i like apples");
    
-
   return 0;
 
 }
