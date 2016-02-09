@@ -4,7 +4,7 @@
 #include <map>
 using namespace std;
 
-/////////////////////// Node //////////////////////////
+//////////////////////// Node //////////////////////////
 
 class Node {
  public:
@@ -55,7 +55,7 @@ class Node {
   int freq;
   Node* left;
   Node* right;
-  string code;
+  string code, decode;
 };
 
 ////////////////////////// Heap //////////////////////////////
@@ -69,7 +69,8 @@ class Heap {
   Node* Minheap;
   int sizeOfTree;
   std::map<char,std::string> map;
-  
+  std::map<std:: string,char> decodeMap;
+
   const static int SIZE = 27;
 
   Heap() {
@@ -233,6 +234,26 @@ class Heap {
     }
   }
 
+  void buildDecodeMap(){
+    Node* root = treeStar[1];
+    buildDecodeMap(root);
+  }
+
+  void buildDecodeMap(Node* node){
+    if(node->left != NULL) {
+      node->left->decode = node->decode + "1";
+      buildDecodeMap(node->left);
+    }
+    if(node->right != NULL) {
+      node->right->decode = node->decode + "0";
+      buildDecodeMap(node->right);
+    }
+    else if(node->right == NULL && node->left == NULL) {
+      decodeMap[node->decode] = node->character;
+    }
+  }
+
+
   void printCode(std::string s) {
     string code = "";
     for(int i=0; i<s.length(); i++) {
@@ -242,65 +263,40 @@ class Heap {
   }
 
   void encode(std::string s) {
-    cout << endl;
-    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  program starting...  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
-    cout << endl;
-    
-    cout << "Start building Heap|.........................................................|  0%" << endl;
-    cout << "start building Heap|******************************...........................| 50%" << endl;
-    cout << "start building Heap|*********************************************************|100%" << endl;
+    //cout << "Start buildHeap" << endl;
     buildHeap(s);
-    cout << "finished building Heap, Heap is:" << endl;
-    printTree();
-    cout << endl;
 
-    cout << "Start merging|..............................................................|  0%" << endl;
-    cout << "start merging|********************************..............................| 50%"<< endl;
-    cout << "start merging|**************************************************************|100%"<< endl;
+    //cout << "Start buildMinHeap" << endl;
+    buildMinHeap();
+
+    //cout << "Start merge" << endl;
     merge();
-    cout << "finished merging, tree is" << endl;
-    printTreeStar();
-    cout << "and trie is:" << endl;    
-    printTrie();
-    cout << endl;
 
-    cout << "start building map|.........................................................|  0%" << endl;
-    cout << "start building map|******************************...........................| 50%"<< endl;
-    cout << "start building map|*********************************************************|100%"<< endl;
+    //cout << "Start buildmap" << endl;
     buildMap();
-    cout << "finished building map, map is:" << endl;
-    printMap();
-    cout << endl;
-    
-    cout << "start encoding|............................................................|  0%" << endl;
-    cout << "start encoding|******************************..............................| 50%"<< endl;
-    cout << "start encoding|************************************************************|100%"<< endl;
-    cout << "finished encoding!" << endl;
-    cout << "the code is: " << endl;;
-    cout << "--------------------------------------------------------------------------" << endl;
-    printCode(s);
-    cout << "--------------------------------------------------------------------------" << endl;
 
-    cout << endl;
-    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  end of program...  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"  << endl;
-    cout << endl;
-    
+    //cout << "Start printcode" << endl;
+    printCode(s);
+
+    //cout << "finished" << endl;
   }
 
   void printDecode(std::string s) {
-    string code = "";
+    string decode = "";
+    buildDecodeMap();
     string output = "";
     for(int i=0; i<s.length(); i++){
-      code += s[i];
-      if(map.find(s[i])== map.end()){
-	output += map[s[i]];
-	code = "";
+      decode += s[i];
+      std::map<std::string, char>::iterator it = decodeMap.find(decode);
+      if(it != decodeMap.end()){
+	output += decodeMap[decode];
+	decode = "";
       } 
     }
     cout << output << endl;
   }
 
-  //////////////////////////  helper ///////////////////////////
+  ///////////////////////  helper ///////////////////////////
  
   int findIndex(char c) {
     for(int i=0; i<SIZE; i++){
@@ -385,21 +381,21 @@ class Heap {
     }
   }
 
-  void printArray(){
+   /*void printArray(){
     for(int i=0; i<27; i++) {
       cout << array[i].character << array[i].freq << " ";
     }
     cout << endl;
   }
 
-  void printTree(){
+   void printTree(){
     for(int i=0; i<sizeOfTree; i++) {
       cout << tree[i].character << tree[i].freq << " ";
     }
     cout << endl;
   }
 
-  void printTreeStar() {
+   void printTreeStar() {
     for(int i=0; i<sizeOfTree; i++) {
       cout << treeStar[i]->getC() << treeStar[i]->getF() << " ";
     }
@@ -407,7 +403,7 @@ class Heap {
   }
 
   void printTrie(){
-    //cout << "start printing Trie" << endl;
+    cout << "start printing Trie" << endl;
     printTrie(treeStar[1]);
   }
   
@@ -441,7 +437,7 @@ class Heap {
       cout << i->second;
       cout << endl;
     } 
-  }
+    }*/
 
   void buildTreeStar(){
     treeStar = new Node*[sizeOfTree];
