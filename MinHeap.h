@@ -14,6 +14,13 @@ class Node {
     this->left = NULL;
     this->right = NULL;
     }
+
+  Node(char c, int freq) {
+    this->character = c;
+    this->freq = freq;
+    this->left = NULL;
+    this->right = NULL;
+  }
   
    Node(char c){
     this->character = c;
@@ -81,7 +88,8 @@ class Heap {
     array[25].character = 'z';
     array[26].character = ' ';   
   }
-  
+
+  // this is OK
   void buildHeap(std::string s){ 
     for(int i=0; i<s.length(); i++){
       int index = findIndex(s[i]);
@@ -99,25 +107,11 @@ class Heap {
     }
   }
 
+  // this is OK
   void buildMinHeap(){
     int k;
-    for(int i=sizeOfTree-1; i>1; i--){
-      k=i/2;
-      if(tree[k].freq > tree[2*k].freq){
-	swap(tree[k], tree[2*k]);
-      }
-      while((2*k+1) <= sizeOfTree){
-	if(tree[k].freq > tree[2*k+1].freq || tree[k].freq > tree[2*k].freq) {
-	  if(tree[2*k].freq >= tree[2*k+1].freq){
-	    swap(tree[k],tree[2*k+1]);
-	    k = 2*k+1;
-	  }
-	  else{
-	    swap(tree[k],tree[2*k]);
-	    k = 2*k; 
-	  }
-	}
-      }     
+    for(int i=sizeOfTree-1; i>=1; i--) {
+      percolateDown(i);
     }
   }
 
@@ -262,15 +256,52 @@ class Heap {
     return count;
   }
 
-  void swap(Node a, Node b) {
-    Node c = a;
-    a = b;
-    b = c;
+  void swap(Node &a, Node &b) {
+    cout << "Swap!!!" << endl;
+
+    char c = a.character;
+    int f = a.freq;
+    
+    a.freq = b.freq;
+    a.character = b.character;
+    
+    b.freq = f;
+    b.character = c;
+  }
+
+  void percolateDown(int i) {
+    int left = 2*i;
+    int right = 2*i + 1;  
+    if(2*i >= sizeOfTree){      // leaf
+      return;
+    }
+    else if(left == sizeOfTree-1) {   // only has left child
+      if(tree[i].freq > tree[left].freq)
+	swap(tree[i],tree[left]);
+    }
+    else if(tree[i].freq > tree[left].freq || tree[i].freq > tree[right].freq) {
+      if(tree[right].freq <= tree[left].freq) {
+	swap(tree[i], tree[right]);
+	percolateDown(right);
+      }
+      else {
+	swap(tree[i], tree[left]);
+	percolateDown(left);
+      }
+    }
+    else {
+      return;
+    }
   }
 
   void printArray(){
     for(int i=0; i<27; i++)
       cout << array[i].character << " " << array[i].freq << endl;
+  }
+
+   void printTree(){
+    for(int i=0; i<sizeOfTree; i++)
+      cout << tree[i].character << " " << tree[i].freq << endl;
   }
  
 };
