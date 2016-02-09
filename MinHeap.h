@@ -329,7 +329,7 @@ class Heap {
    void percolateDown2(int i) {
     int left = 2*i;
     int right = 2*i + 1;  
-    if(2*i >= sizeOfTree || treeStar[left] == NULL || treeStar[right] == NULL){      // leaf
+    if(2*i >= sizeOfTree){      // leaf
       return;
     }
     else if(left == sizeOfTree-1) {   // only has left child
@@ -379,7 +379,17 @@ class Heap {
   }
   
   void printTrie(Node* node){
-    cout << "this: " << node->getC() << node->getF() << endl;
+    // print this node and its children
+    cout << "this: " << node->getC() << node->getF() << " ";
+    if(node->left != NULL) {
+      cout << "this->left: " << node->left->getC() << node->left->getF() << " ";
+    }
+    if(node->right != NULL) {
+      cout << "this->right: " << node->right->getC() << node->right->getF() << " ";
+    }
+    cout << endl;
+    
+    // recursive call
     if(node->left != NULL) {
       //cout << "left: " << node->left->getC() << node->left->getF() << endl;
       printTrie(node->left);
