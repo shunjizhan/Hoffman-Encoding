@@ -9,7 +9,7 @@ Main.o: Main.cpp
 	${CXX} -c Main.cpp
 
 test: MinHeap.o Main.o
-	${CXX} MinHeap.o Main.o -o encode
+	${CXX} MinHeap.o Main.o -o prog2
 
 clean:
-	/bin/rm -f *.o MinHeap.o Main.o encode
+	/bin/rm -f *.o MinHeap.o Main.o prog2
