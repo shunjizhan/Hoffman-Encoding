@@ -1,11 +1,11 @@
 CXX=clang++
 # CXX=g++
 
-test: MinHeap.o Main.o
-	${CXX} MinHeap.o Main.o -o prog2
+hoffman: MinHeap.o Main.o
+	${CXX} MinHeap.o Main.o -o hoffman
 
 clean:
-	/bin/rm -f *.o MinHeap.o Main.o prog2
+	/bin/rm -f *.o MinHeap.o Main.o hoffman
 
 MinHeap.o: MinHeap.cpp
 	${CXX} -c MinHeap.cpp
