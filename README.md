@@ -1,5 +1,10 @@
-# Hoffman-Encoding
+# Introduction
+This is a C++ program which can perform the Hoffman encoding. It will read texts in "plain.input", and build the minheap. Then it will read text in "encoded.input", and print the decoded text according to the previous minheap.
 
-The string to encode is in "plain.input"; The string to decode is in "encoded.input"
+# Run
+    cd Hoffman-Encoding/
+    make
+    ./hoffman
 
-To run: "make" or "make hoffman", then ./hoffman
+# Author
+Shunji Zhan
