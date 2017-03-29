@@ -7,4 +7,4 @@ This is a C++ program which can perform the Hoffman encoding. It will read texts
     ./hoffman
 
 # Author
-Shunji Zhan
+Shunji Zhan & Dongyang Li
